@@ -10,13 +10,8 @@ import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import Container from '@mui/material/Container';
-const settings = [
-  { name: 'Gestionar peliculas', route: '/editMovies' },
-  { name: 'Gestionar usuarios', route: '/manageUsers' },
-  { name: 'Historial de compras', route: '/purchaseHistory' }
-];
 
-function Appbar() {
+function Appbar(settings) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
 
