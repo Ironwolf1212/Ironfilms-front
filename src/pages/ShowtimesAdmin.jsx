@@ -41,7 +41,9 @@ function ShowtimesAdmin() {
 
     return (
         <div className="App">
-            <Appbar />
+            <Appbar settings={[{ name: 'Gestionar peliculas', route: '/editMovies' },
+  { name: 'Gestionar usuarios', route: '/manageUsers' },
+  { name: 'Historial de compras', route: '/purchaseHistory' }]}/>
             <div className="search-container">
                 <input
                     type="text"

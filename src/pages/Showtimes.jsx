@@ -4,7 +4,9 @@ import Appbar from '../components/Appbar';
 import Movie from '../components/Movie';
 import axios from 'axios';
 
+
 function Showtimes() {
+
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredMovies, setFilteredMovies] = useState([]);
@@ -47,7 +49,7 @@ function Showtimes() {
         />
       </div>
       <div className='MovieList'>
-        {filteredMovies.map((movie) => (
+        { filteredMovies.map((movie) => (
           <Movie
             key={movie.id}
             imagen={movie.link_portada}

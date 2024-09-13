@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import Container from '@mui/material/Container';
 
-function Appbar(settings) {
+function Appbar({ settings }) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
 
@@ -65,14 +65,18 @@ function Appbar(settings) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem
-                  key={setting.name}
-                  onClick={() => handleMenuItemClick(setting.route)}
-                >
-                  <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
-                </MenuItem>
-              ))}
+              {settings ? (
+                settings.map((setting) => (
+                  <MenuItem
+                    key={setting.name}
+                    onClick={() => handleMenuItemClick(setting.route)}
+                  >
+                    <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled>No settings available</MenuItem>
+              )}
             </Menu>
           </Box>
 
