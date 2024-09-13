@@ -1,14 +1,9 @@
 import { Container } from '@mui/material';
 import React, { useState } from 'react';
+import BuyTicketForm from './BuyTicketForm';
 
-function Movie({ imagen, nombre, duracion, genero }) {
-  const [cantidadBoletos, setCantidadBoletos] = useState(0);
+function Movie({ imagen, nombre, duracion, genero , comentarios}) {
 
-  const handleComprar = () => {
-    // Aquí iría la lógica para comprar los boletos
-    // Por ejemplo, hacer una petición a un servidor para procesar la compra
-    console.log(`Comprar ${cantidadBoletos} boletos para ${nombre}`);
-  };
 
   return (
     <div className="Movie">
@@ -18,7 +13,12 @@ function Movie({ imagen, nombre, duracion, genero }) {
       <p className='Text-left'>{duracion}</p>
       <div>
       </div>
-      <button className="Button" onClick={handleComprar}>Ver horarios</button>
+      <BuyTicketForm
+      imagen={imagen} 
+      nombre={nombre} 
+      duracion={duracion} 
+      genero={genero}
+      comentarios={comentarios}/>
     </div>
   );
 }

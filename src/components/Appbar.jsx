@@ -5,71 +5,57 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
+import Tooltip from '@mui/material/Tooltip';
+import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
-
-const pages = [];
-const settings = ['Gestionar peliculas', 'Gestionar usuarios', 'Historial de compras'];
+import Container from '@mui/material/Container';
+const settings = [
+  { name: 'Gestionar peliculas', route: '/editMovies' },
+  { name: 'Gestionar usuarios', route: '/manageUsers' },
+  { name: 'Historial de compras', route: '/purchaseHistory' }
+];
 
 function Appbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
 
-  return (
-    <AppBar position="static" sx={{bgcolor:'#424769'}}>
-        <div className='Container'>
-      <Container maxWidth="xl"  margin-right='10px'>
-        <Toolbar sx={{mr: '10px'}}disableGutters>
-          
-          <img className='Logo' src='https://ironfilms.s3.us-east-2.amazonaws.com/Ironfilms.png'></img>
+  const handleMenuItemClick = (route) => {
+    handleCloseUserMenu();
+    navigate(route);
+  };
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, bgcolor:'#424769' }}>
-            
-            
+  return (
+    <AppBar position="static" sx={{ bgcolor: '#424769' }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <img 
+            onClick={() => navigate('/')} 
+            className='Logo' 
+            src='https://ironfilms.s3.us-east-2.amazonaws.com/Ironfilms.png' 
+            alt="Logo" 
+          />
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, bgcolor: '#424769' }}>
+            {/* Other navigation items can be added here */}
           </Box>
-          
-          
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, bgcolor:'#424769' }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-          
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <img className='MenuIcon' alt="Remy Sharp" src="/static/menu.png" />
+                <img className='MenuIcon' alt="Menu Icon" src="/static/menu.png" />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px'}}
+              sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -85,21 +71,21 @@ function Appbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                <MenuItem
+                  key={setting.name}
+                  onClick={() => handleMenuItemClick(setting.route)}
+                >
+                  <Typography sx={{ textAlign: 'center' }}>{setting.name}</Typography>
                 </MenuItem>
               ))}
-              
             </Menu>
-            
           </Box>
-          
+
           <LoginForm />
         </Toolbar>
-        
       </Container>
-      </div>
     </AppBar>
   );
 }
+
 export default Appbar;

@@ -1,25 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../App.css';
-import  Appbar  from '../components/Appbar';
+import Appbar from '../components/Appbar';
 import Movie from '../components/Movie';
+import axios from 'axios';
 
-function Greeting(props) {
+function Showtimes() {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:8080/pelicula/all')
+      .then((response) => {
+        setMovies(response.data); // Establecer películas en el estado
+      })
+      .catch((error) => {
+        console.error("Error al obtener películas", error);
+      });
+  }, []);
+
   return (
     <div className="App">
       <Appbar />
       <div className='MovieList'>
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Beetlejuice_Beetlejuice_poster.jpg.png" nombre="Beetlejuice Beetlejuice" duracion="120 min" genero="Comedia, fantasía, teror" />
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Intensamente2.png" nombre="Intensamente 2" duracion="120 min" genero="Acción, aventura, comedia" />
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Mivillanofavorito4.png" nombre="Mi villano favorito 4" duracion="120 min" genero="Animación, aventura, comedia" />
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Beetlejuice_Beetlejuice_poster.jpg.png" nombre="Beetlejuice Beetlejuice" duracion="120 min" genero="Comedia, fantasía, teror" />
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Intensamente2.png" nombre="Intensamente 2" duracion="120 min" genero="Acción, aventura, comedia" />
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Mivillanofavorito4.png" nombre="Mi villano favorito 4" duracion="120 min" genero="Animación, aventura, comedia" />
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Beetlejuice_Beetlejuice_poster.jpg.png" nombre="Beetlejuice Beetlejuice" duracion="120 min" genero="Comedia, fantasía, teror" />
-      <Movie imagen="https://ironfilms.s3.us-east-2.amazonaws.com/Intensamente2.png" nombre="Intensamente 2" duracion="120 min" genero="Acción, aventura, comedia" />
+        {movies.map((movie) => (
+          <Movie
+            key={movie.id}
+            imagen={movie.link_portada}
+            nombre={movie.titulo}
+            duracion={`${movie.duracion} min`}
+            genero={movie.genero}
+            comentarios={movie.comentarios}
+          />
+        ))}
       </div>
-      
     </div>
   );
 }
 
-export default Greeting;
+export default Showtimes;

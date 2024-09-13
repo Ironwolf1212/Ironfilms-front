@@ -82,11 +82,36 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.6);
   display: flex;
-  justify-content: center;
+  justify-content: justify;
   align-items: center;
+  display: flex;
+  flex-direction: row;
   z-index: 1000;
+  align-content: center;
+  justify-content: center;
 }
-
+.pay-form{
+  display: flex;
+  flex-direction: column;
+  margin-left: 200px;
+  columns: 1;
+  max-width: 500px;
+  right: 0;
+  background-color: var(--highlight);
+  height: 30rem;
+  justify-content: center;
+  border-radius: 30px;
+  padding-left: 20px;
+  width: 54%;
+  font-family: "Roboto Mono";
+  font-weight: 300;
+}
+.payment-form{
+  height: 90%;
+  background-color: white;
+  color: black;
+  border-radius: 30px;
+}
 .login-form {
   position: absolute;
   background: white;
@@ -105,14 +130,80 @@
   max-width: 400px;
   width: 250px;
 }
+
+.buy-form {
+  display: inline-table;
+  background: white;
+  left:30%;
+  top:10%;
+  padding: 20px;
+  padding-left: 0px;
+  padding-right: 0px;
+  border-radius: 20px;
+  z-index: 1001;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  font-family: 'Roboto Mono';
+  font-weight: 300;
+  color:white;
+  background-color: var(--highlight);
+  width: 40rem;
+  max-width: 40rem;
+  height: 37rem;
+  align-content: center;
+}
+.number-input{
+  border-color: var(--container);
+  border-radius: 4px;
+  border-width: 1px;
+  font-family: 'Roboto Mono';
+  font-size: 16px;
+  
+}
 .form-title {
   text-align: center;
   font-weight: 300;
   font-size: 20px;
 }
+.movie-description{
+  display: flex;
+  flex-direction: row	;
+  width: 100%;
+  column-count: 2;
+  column-gap: 20px;
+  padding-right: 105px;
+}
+.buy-movie-thumbnail{
+  align-self: center;
+  margin-left: 25px;
+  width: 180px;
+  height:275px;
+  object-fit: cover;
+  
+}
+.buy-movie-thumbnail-container{
+  width: fit-content;
+  width: 33%;
+
+}
+.footer{
+  position: relative;
+  font-style: italic;
+  font-weight: 300;
+  bottom: 0;
+}
+.lower-right{
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+}
+.movie-title{
+  font-size: 24px;
+  font-weight: 500;
+  margin-top: 20px;
+}
 .form-container{
   margin-top: 20px;
-  width: 230px;
+  width: 97%;
   font-size: 14px;
   font-weight: 400;
   background-color: white;
@@ -122,6 +213,15 @@
   padding-top: 30px;
   text-align:start;
 }
+.buy-movie-info{
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 67%;
+  margin-left: 10px;
+  margin-top: 20px;
+  columns: 1;
+}	
 .input-field{
   background-color: var(--textfield);
   color:var(--background)
@@ -137,6 +237,7 @@
 
 .login-form label {
   margin-bottom: 10px;
+
 }
 
 .login-form input {
@@ -153,6 +254,7 @@
   margin: 15px;
   margin-top: 30px;
   position: absolute;
+  cursor: pointer;
   
 }
 .Solo-Logo{
@@ -161,6 +263,7 @@
   margin: 15px;
   position: absolute;
   left: 10%;
+  cursor: pointer;
 }
 .Register-Form Button{
   margin-top: 4rem;
@@ -184,6 +287,11 @@
   color:white;
   text-decoration: none;
 }
+.normal-text{
+  margin-top: 7px;
+  font-size: 16px;
+  
+}
 .form-footer a{
   color: white;
   text-decoration: none;
@@ -195,8 +303,47 @@
   align-self: center;
   width: 70%;
 }
+.buy-window-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  width: 100%;
+}
+.buy-window-row{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.price-row{
+  margin-top: 25px;
+  width: 415px;
+  display: flex;
+  flex-direction: row;
+}
+.label-left{
+  text-align: right;
+  font-weight: 300;
+  width: 50%;
+  
+}
+.label-right{
+  margin-left: 5%;
+  text-align: left;
+  width: 45%;
+  font-family: "Roboto Mono";	
+  max-width: 300px;
+
+}
 #underlined-text{
   text-decoration: underline;
+}
+.separator-description{
+  display: inline-flex;
+  flex-direction: column  ;
 }
 .Movie{
   display:inline-block;

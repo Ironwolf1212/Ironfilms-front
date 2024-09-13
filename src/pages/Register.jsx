@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { UserContext } from '../UserContext';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -9,8 +12,11 @@ const Register = () => {
         email: '',
         cellphone: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        registerAdmin: false
     });
+    const navigate = useNavigate();
+    const {user, setUser } = useContext(UserContext);
 
     const handleChange = (e) => {
         setFormData({
@@ -18,6 +24,9 @@ const Register = () => {
             [e.target.name]: e.target.value,
         });
     };
+    const handleLogoClick = () => {
+        navigate('/');
+      }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -36,10 +45,40 @@ const Register = () => {
                 email: formData.email,
                 cellphone: formData.cellphone,
                 password: formData.password,
+                roles: "ROLE_USER"
             });
 
             if (response.status === 200) {
+                try {
+                    const response = await axios.post('http://localhost:8080/usuario/login', {
+                        username: formData.username,
+                        password: formData.password,
+                        withCredentials: true
+                    });
+        
+                    if (response.status === 200) {
+                        const token = response.data.token;
+                        const username = response.data.username;
+                        const roles = response.data.roles;
+                        localStorage.setItem('user', JSON.stringify({ username, roles }));
+                        Cookies.set('token', token, { expires: 1 });
+                        console.log("Devuelve nombre de usuario:",username)
+                        setUser(username); // Set the username after successful login
+                    } else {
+                        alert("Login failed");
+                    }
+                } catch (error) {
+                    console.error("There was an error logging in!", error);
+                    alert("Error logging in");
+                }
                 alert("User registered successfully");
+                const userResponse = await axios.get(`http://localhost:8080/usuario/username/${formData.username}`);
+                if (userResponse.data.roles === "ROLE_ADMIN") {
+                    navigate('/admin');
+                    
+                } else {
+                navigate('/');
+                }
             } else {
                 alert("Failed to register user");
             }
@@ -52,7 +91,7 @@ const Register = () => {
     return (
         <div className='BlueBackground App'>
             <div className='AppBar'>
-                <img className='Solo-Logo' src='https://ironfilms.s3.us-east-2.amazonaws.com/Ironfilms.png' alt="Iron Films Logo"></img>
+                <img onClick={handleLogoClick} className='Solo-Logo' src='https://ironfilms.s3.us-east-2.amazonaws.com/Ironfilms.png' alt="Iron Films Logo"></img>
             </div>
             <div className='Content'>
                 <div className='Register-Form'>
@@ -127,6 +166,7 @@ const Register = () => {
                             onChange={handleChange}
                             required
                         />
+                        <input type='checkbox' name='registerAdmin' value = {true}/>
                         <button className="Button" type="button" style={{ backgroundColor: "var(--background)", borderRadius: '5px', width: '140px' }}>Cancelar</button>
                         <button className="Button" type="submit" style={{ borderRadius: '5px', width: '140px' }}>Registrarse</button>
                     </form>
