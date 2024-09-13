@@ -12,7 +12,7 @@ const AddMovie = () => {
         thumbnailUrl: '',
     });
     const handleLogoClick = () => {
-        navigate('/');
+        navigate('/admin');
       }
     const handleSaveMovie = async (e) => {
         e.preventDefault();
@@ -28,7 +28,7 @@ const AddMovie = () => {
             });
             if (response.status === 200) {
                 alert('Película guardada con éxito');
-                navigate('/')
+                navigate('/admin')
             }
             else {
                 alert('Error al guardar la película');

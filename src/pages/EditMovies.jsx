@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import ChangeMovieName from '../components/ChangeMovieName';
 
 const EditMovies = () => {
     const [movies, setMovies] = useState([]);
@@ -11,6 +12,7 @@ const EditMovies = () => {
         duration: '',
         additionalInfo: ''
     });
+    const [movieId, setMovieId] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,6 +39,7 @@ const EditMovies = () => {
                 additionalInfo: movie.comentarios,
                 thumbnailUrl: movie.link_portada
             });
+            setMovieId(movieId);
         }
     };
 
@@ -63,13 +66,32 @@ const EditMovies = () => {
     const handleAddMovie = () => {
         navigate('/addMovie');
     };
+
     const handleDeleteMovie = () => {
-        console.log(formData);
-        //Donothing
+        if (selectedMovie) {
+            axios.delete(`http://localhost:8080/pelicula/${selectedMovie.id}`)
+                .then(response => {
+                    alert('Movie deleted successfully');
+                    // Remove deleted movie from state
+                    setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
+                    setSelectedMovie(null); // Clear selection
+                    setFormData({
+                        title: '',
+                        genre: '',
+                        duration: '',
+                        additionalInfo: ''
+                    });
+                })
+                .catch(error => {
+                    console.error('Error deleting movie:', error);
+                });
+        } else {
+            alert('Please select a movie to delete');
+        }
     };
 
     const handleLogoClick = () => {
-        navigate('/');
+        navigate('/admin');
     };
 
     return (
@@ -77,46 +99,58 @@ const EditMovies = () => {
             <div className='AppBar'>
                 <img onClick={handleLogoClick} className='Solo-Logo' src='https://ironfilms.s3.us-east-2.amazonaws.com/Ironfilms.png' alt="Iron Films Logo" />
             </div>
-            <h1>Editar Películas</h1>
-            <form>
-                <label>Seleccione película</label>
-                <select value={selectedMovie ? selectedMovie.id : ''} onChange={handleMovieChange}>
-                    <option value="">Seleccionar una película</option>
-                    {movies.map(movie => (
-                        <option key={movie.id} value={movie.id}>{movie.titulo}</option>
-                    ))}
-                </select>
-                <button>Cambiar nombre</button>
-                <button>Cambiar imagen</button>
-                <img src={formData.thumbnailUrl}></img>
-                <label>Género</label>
-                <input
-                    type='text'
-                    name='genre'
-                    value={formData.genre}
-                    onChange={handleChange}
-                    placeholder='Género'
-                />
-                <label>Duración</label>
-                <input
-                    type='text'
-                    name='duration'
-                    value={formData.duration}
-                    onChange={handleChange}
-                    placeholder='Duración'
-                />
-                <label>Información adicional</label>
-                <input
-                    type='text'
-                    name='additionalInfo'
-                    value={formData.additionalInfo}
-                    onChange={handleChange}
-                    placeholder='Información adicional'
-                />
-                <button type='button' onClick={handleUpdateMovie}>Actualizar película</button>
-                <button type='button' onClick={handleDeleteMovie}>Borrar película</button>
-                <button type='button' onClick={handleAddMovie}>Agregar nueva película</button>
-            </form>
+            <div className='Background'>
+                <div className='content-edit'>
+                    <div>
+                        <h1>Editar Películas</h1>
+                    </div>
+                    <div className='container-edit'>
+                        <form>
+                            <div className='left-column'>
+                                <label>Seleccione película</label>
+                                <select value={selectedMovie ? selectedMovie.id : ''} onChange={handleMovieChange}>
+                                    <option value="">Seleccionar una película</option>
+                                    {movies.map(movie => (
+                                        <option key={movie.id} value={movie.id}>{movie.titulo}</option>
+                                    ))}
+                                </select>
+                                <ChangeMovieName movieId={movieId} />
+
+                                <label>Género</label>
+                                <input
+                                    type='text'
+                                    name='genre'
+                                    value={formData.genre}
+                                    onChange={handleChange}
+                                    placeholder='Género'
+                                />
+                                <label>Duración</label>
+                                <input
+                                    type='text'
+                                    name='duration'
+                                    value={formData.duration}
+                                    onChange={handleChange}
+                                    placeholder='Duración'
+                                />
+                                <label>Información adicional</label>
+                                <input
+                                    type='text'
+                                    name='additionalInfo'
+                                    value={formData.additionalInfo}
+                                    onChange={handleChange}
+                                    placeholder='Información adicional'
+                                />
+                            </div>
+                            <div className='right-column'>
+                                <img src={formData.thumbnailUrl} alt="Thumbnail" />
+                                <button>Cambiar imagen</button>
+                            </div>
+                        </form>
+                        <button type='button' onClick={handleUpdateMovie}>Actualizar película</button>
+                        <button type='button' onClick={handleAddMovie}>Agregar nueva película</button>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

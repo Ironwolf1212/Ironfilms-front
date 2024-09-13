@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/UsersTable.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const UsersTable = () => {
     const [users, setUsers] = useState([]);
@@ -21,7 +23,36 @@ const UsersTable = () => {
 
         fetchUsers();
     }, []);
+    const handleViewPurchases = () => {
+        alert("Sorry, this feature is not available yet");
+    };
 
+    const handleUserStatusChange = async (userId, isEnabled, e) => {
+        e.preventDefault();
+        try {
+            const url = isEnabled 
+                ? `http://localhost:8080/usuario/${userId}/disable` 
+                : `http://localhost:8080/usuario/${userId}/enable`;
+                
+            const response = await axios.patch(url, {}, { withCredentials: true });
+
+            if (response.status === 200) {
+                const updatedUsers = users.map(user => 
+                    user.id === userId ? { ...user, enabled: !isEnabled } : user
+                );
+                setUsers(updatedUsers);
+                setFilteredUsers(updatedUsers);
+                alert(isEnabled ? 'Account disabled successfully' : 'Account enabled successfully');
+            }
+        } catch (error) {
+            console.error('Error changing user status:', error);
+            alert('Error changing user status');
+        }
+    };
+    const navigate = useNavigate();
+    const handleLogoClick = () => {
+        navigate('/admin');
+      }
     useEffect(() => {
         // Filter users based on the search term
         if (searchTerm === '') {
@@ -40,6 +71,9 @@ const UsersTable = () => {
 
     return (
         <div>
+            <div className='AppBar'>
+                <img onClick={handleLogoClick} className='Solo-Logo' src='https://ironfilms.s3.us-east-2.amazonaws.com/Ironfilms.png' alt="Iron Films Logo"></img>
+            </div>
             <h1>Users Table</h1>
             <input
                 type="text"
@@ -55,6 +89,7 @@ const UsersTable = () => {
                         <th>Name</th>
                         <th>Surname</th>
                         <th>Email</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,13 +101,19 @@ const UsersTable = () => {
                                 <td>{user.name}</td>
                                 <td>{user.surname}</td>
                                 <td>{user.email}</td>
-                                <td><button>Ver compras</button></td>
-                                <td><button>Inhabilitar cuenta</button></td>
+                                <td>
+                                    <button onClick={handleViewPurchases}>View Purchases</button>
+                                    <button
+                                        onClick={(e) => handleUserStatusChange(user.id, user.enabled, e)}
+                                    >
+                                        {user.enabled ? 'Disable Account' : 'Enable Account'}
+                                    </button>
+                                </td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="5">No users found</td>
+                            <td colSpan="6">No users found</td>
                         </tr>
                     )}
                 </tbody>
